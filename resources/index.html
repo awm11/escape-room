@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#020805" />
+    <title>TEMPORA · Teacher guide</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap"
+    />
+    <style>
+      :root {
+        --void: #000604;
+        --screen: #03100a;
+        --panel: #061a10;
+        --line: #1c2e24;
+        --text: #cdeedb;
+        --dim: #7fa892;
+        --prompt: #39ff88;
+        --mars: #ffa552;
+        --alarm: #ff6b6b;
+        --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+        --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: radial-gradient(120% 60% at 50% 0%, #0b1f14 0%, var(--void) 60%) fixed, var(--void);
+        color: var(--text);
+        font: 400 17px/1.6 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--prompt); text-underline-offset: 0.2em; }
+      a:hover { color: #9dffc4; }
+      :focus-visible { outline: 2px solid var(--prompt); outline-offset: 3px; }
+
+      .page { max-width: 46rem; margin: 0 auto; padding: 56px 20px 96px; }
+
+      /* Header */
+      .mast { margin-bottom: 40px; }
+      .mast h1 {
+        margin: 0;
+        font: 700 clamp(30px, 6vw, 46px) / 1.05 var(--mono);
+        letter-spacing: 0.06em;
+        color: var(--prompt);
+        text-shadow: 0 0 18px rgb(57 255 136 / 0.35);
+      }
+      .mast h1 span { display: block; font-size: 0.42em; letter-spacing: 0.02em; color: var(--text); text-shadow: none; margin-top: 0.5em; font-weight: 400; }
+      .mast p { color: var(--dim); max-width: 38rem; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+      .btn {
+        display: inline-block;
+        padding: 0.7em 1.2em;
+        font: 700 15px/1 var(--mono);
+        text-decoration: none;
+        border-radius: 4px;
+        border: 1px solid var(--prompt);
+      }
+      .btn-solid { background: var(--prompt); color: var(--screen); box-shadow: 0 0 20px rgb(57 255 136 / 0.25); }
+      .btn-solid:hover { color: var(--screen); box-shadow: 0 0 30px rgb(57 255 136 / 0.45); }
+      .btn-line { color: var(--prompt); }
+
+      /* Contents */
+      .toc { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 0; margin-bottom: 48px; font: 14px/1.9 var(--mono); }
+      .toc ol { margin: 0; padding-left: 1.4em; columns: 2 14rem; }
+      .toc li { margin: 0; }
+      .toc a { color: var(--dim); text-decoration: none; }
+      .toc a:hover { color: var(--prompt); }
+
+      /* Sections */
+      section { margin-bottom: 56px; scroll-margin-top: 20px; }
+      h2 { font: 700 21px/1.3 var(--mono); color: var(--prompt); margin: 0 0 14px; }
+      h3 { font: 700 16px/1.4 var(--mono); color: var(--text); margin: 28px 0 8px; }
+      ul, ol { padding-left: 1.3em; }
+      li { margin: 0.3em 0; }
+      li ul { margin: 0.2em 0 0.4em; color: var(--dim); }
+      li ul li { margin: 0.1em 0; }
+      code, .code { font-family: var(--mono); font-size: 0.92em; color: #eafff2; background: rgb(57 255 136 / 0.08); padding: 0.05em 0.35em; border-radius: 3px; overflow-wrap: anywhere; }
+
+      .note {
+        border-left: 3px solid var(--mars);
+        background: rgb(255 165 82 / 0.07);
+        padding: 12px 16px;
+        border-radius: 0 4px 4px 0;
+        margin: 18px 0;
+      }
+      .note strong { color: var(--mars); }
+
+      /* Downloads */
+      .files { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+      .files li { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: baseline; padding: 14px 0; margin: 0; border-bottom: 1px solid var(--line); }
+      .files a { font: 600 16px/1.4 var(--sans); }
+      .files .size { font: 13px var(--mono); color: var(--dim); white-space: nowrap; }
+      .files p { grid-column: 1 / -1; margin: 0; color: var(--dim); font-size: 15px; }
+
+      /* Codes table */
+      table { width: 100%; border-collapse: collapse; font-size: 15px; }
+      th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { font: 700 13px var(--mono); color: var(--dim); }
+      td.answer { font-family: var(--mono); color: #eafff2; font-weight: 700; overflow-wrap: anywhere; }
+
+      /* Story steps */
+      .steps { list-style: none; padding: 0; counter-reset: step; }
+      .steps > li { counter-increment: step; position: relative; padding: 0 0 22px 52px; margin: 0; }
+      .steps > li::before {
+        content: counter(step);
+        position: absolute; left: 0; top: 0;
+        width: 34px; height: 34px;
+        display: grid; place-items: center;
+        font: 700 15px var(--mono);
+        color: var(--screen); background: var(--prompt);
+        border-radius: 50%;
+      }
+      .steps > li::after { content: ''; position: absolute; left: 16px; top: 38px; bottom: 4px; width: 2px; background: var(--line); }
+      .steps > li:last-child::after { display: none; }
+      .steps h3 { margin: 4px 0 4px; }
+      .steps p { margin: 0.3em 0; }
+      .scene { font: 12px var(--mono); color: var(--dim); }
+
+      .scenes { columns: 2 16rem; font-size: 15px; }
+      .scenes li { break-inside: avoid; }
+
+      footer { color: var(--dim); font-size: 14px; border-top: 1px solid var(--line); padding-top: 20px; }
+
+      @media print {
+        :root { --text: #111; --dim: #444; --prompt: #0a6b34; --mars: #9a4b00; --line: #ccc; }
+        body { background: #fff; color: #111; font-size: 11pt; }
+        .actions, .toc { display: none; }
+        .mast h1, h2 { text-shadow: none; }
+        code, .code, td.answer { color: #111; background: #eee; }
+        .steps > li::before { color: #fff; background: #0a6b34; }
+        section { break-inside: avoid-page; margin-bottom: 28px; }
+        a { color: #111; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="mast">
+        <h1>TEMPORA<span>Escape room: teacher guide</span></h1>
+        <p>
+          A physics escape room for Year 8. Groups are stranded on a freezing ship orbiting Mars and must
+          work through puzzles to restart the engines, guided by Mars Base Alpha on the ship's terminal.
+          The terminal is a web page, so all you need is a laptop with a browser. There is no login.
+        </p>
+        <div class="actions">
+          <a class="btn btn-solid" href="../">Open the game</a>
+          <a class="btn btn-line" href="#downloads">Download the resources</a>
+        </div>
+      </header>
+
+      <nav class="toc" aria-label="Contents">
+        <ol>
+          <li><a href="#downloads">Downloads</a></li>
+          <li><a href="#gather">What you need</a></li>
+          <li><a href="#kit">Each group's kit</a></li>
+          <li><a href="#setup">Setting up</a></li>
+          <li><a href="#story">Running the room</a></li>
+          <li><a href="#codes">Answers at a glance</a></li>
+          <li><a href="#help">If something goes wrong</a></li>
+          <li><a href="#after">Afterwards</a></li>
+        </ol>
+      </nav>
+
+      <section id="downloads">
+        <h2>Downloads</h2>
+        <ul class="files">
+          <li>
+            <a href="../downloads/tempora-printed-resources.pptx" download>Printed resources</a>
+            <span class="size">PowerPoint · 27 MB</span>
+            <p>Most of the printed materials: manual cover, planet poster, puzzle grid, shopping list, Captain's Code-le, torn-out page, filter grid, locker signs and box labels. Print the Tempora cover in A3. Print the double-sided slides with "flip on long edge".</p>
+          </li>
+          <li>
+            <a href="../downloads/tempora-manual.docx" download>Tempora user manual</a>
+            <span class="size">Word · 840 KB</span>
+            <p>Includes the pendulum instructions. Stick the A3 cover from the printed resources on the front.</p>
+          </li>
+          <li>
+            <a href="../downloads/tempora-do-now.docx" download>Do Now task</a>
+            <span class="size">Word · 270 KB</span>
+            <p>One for every student (two per page). The first letters of the answers spell TEMPORA.</p>
+          </li>
+          <li>
+            <a href="../downloads/tempora-story-letter.docx" download>Story letter</a>
+            <span class="size">Word · 23 KB</span>
+            <p>Sets the scene. Put it in the envelope you hand over once the Do Now is done (two per page).</p>
+          </li>
+          <li>
+            <a href="../downloads/tempora-teacher-how-to.docx" download>Teacher how-to (printable)</a>
+            <span class="size">Word · 24 KB</span>
+            <p>The kit list, set-up and storyline from this page as a one-sheet document to keep next to you.</p>
+          </li>
+          <li>
+            <a href="../downloads/escape.py" download>Backup: original Python version</a>
+            <span class="size">Python · 11 KB</span>
+            <p>Only needed if this website is unavailable. It runs in any Python 3 environment, such as onlinegdb.com, and follows the same script.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="gather">
+        <h2>What you need</h2>
+        <p>Per group, as well as the printed resources and a laptop:</p>
+        <ul>
+          <li>Pendulum bob on a metre-long string with a loop</li>
+          <li>Stop clock</li>
+          <li>Tape</li>
+          <li>Various colour filters, including red</li>
+          <li>Compass, magnet and magnifying glass (these are decoys)</li>
+          <li>Clamp stand and clamp</li>
+          <li>An empty, dry kettle</li>
+          <li>Blu Tack</li>
+          <li>8 zip ties</li>
+          <li>Two padlocks with settable codes, a box to use as the Orbital Utility Kit, and a lockable cupboard</li>
+        </ul>
+      </section>
+
+      <section id="kit">
+        <h2>Each group's kit</h2>
+        <p>Use this as the checklist when setting up and again when packing away.</p>
+        <ul>
+          <li>Do Now task for <strong>each student</strong></li>
+          <li>Orbital Utility Kit (box)
+            <ul>
+              <li>Padlock set to <code>783</code></li>
+              <li>Pendulum bob on a metre-long string (pre-measured and knotted)</li>
+              <li>Stop clock</li>
+              <li>Envelope with the puzzle and puzzle hint</li>
+              <li>Tape</li>
+              <li>Coloured filters, including red</li>
+              <li>Decoys: compass, magnet, magnifying glass</li>
+            </ul>
+          </li>
+          <li>Kettle
+            <ul><li>Containing the torn-out page</li></ul>
+          </li>
+          <li>Locked cupboard (the Captain's Locker)
+            <ul>
+              <li>"Captain's Locker" sign</li>
+              <li>Filter puzzle (black and white grid) inside</li>
+              <li>Padlock set to <code>478</code></li>
+            </ul>
+          </li>
+          <li>Laptop with the game open (see below)</li>
+          <li>Tempora User Manual
+            <ul><li>Contains the "shopping list" planet puzzle (answer <code>783</code>)</li></ul>
+          </li>
+          <li>Clamp stand</li>
+          <li>Captain's Code-le stuck under the desk
+            <ul><li>Answer <code>478</code></li></ul>
+          </li>
+        </ul>
+      </section>
+
+      <section id="setup">
+        <h2>Setting up</h2>
+        <ol>
+          <li>On each laptop, open <a href="../">alexmoorephysics.com/escape-room</a>. Plug it in and turn off sleep so the screen stays on. Full screen (F11, or Ctrl+Cmd+F on a Mac) looks best.</li>
+          <li>Leave it on the start screen. Groups can type their crew names before pressing <span class="code">Start mission</span>. The names appear on the mission report at the end.</li>
+          <li>Stick the Captain's Code-le under the desk.</li>
+          <li>Lock the black and white filter grid in the cupboard, with the Captain's Locker sign on the front.</li>
+          <li>Put the manual (with the shopping list inside) on the desk.</li>
+          <li>Optional: play some atmospheric music. <a href="https://www.youtube.com/watch?v=Kcjr0xSGIJk" target="_blank" rel="noopener">Option 1 (recommended)</a>, <a href="https://www.youtube.com/watch?v=EdYirMBORp4" target="_blank" rel="noopener">option 2</a>, <a href="https://www.youtube.com/watch?v=n--SX54AUZU" target="_blank" rel="noopener">option 3</a>.</li>
+        </ol>
+        <div class="note">
+          <strong>Students should not write on any of the sheets.</strong> If they need to, they can use a blank piece of paper.
+        </div>
+      </section>
+
+      <section id="story">
+        <h2>Running the room</h2>
+        <p>
+          Mars Base Alpha tells students they have about 40 minutes. The cabin temperature in the corner of the screen
+          drops the whole time, and frost creeps in from the edges, but nothing happens when it gets very cold.
+          It's there for atmosphere.
+        </p>
+        <ol class="steps">
+          <li>
+            <h3>Do Now</h3>
+            <p>Students complete the Do Now. The first letters of the answers spell <code>TEMPORA</code>.
+            When they show you, hand over the envelope with the story letter, and let them press Start mission.</p>
+          </li>
+          <li>
+            <h3>Repair the heating</h3>
+            <p>The ship's menu appears. Students choose an item with the <strong>arrow keys</strong> and <strong>Enter</strong> (or by tapping it).
+            Choosing Heating shows the cabin is at 5°C and tells them to contact the Martian Citadel, so they choose
+            <span class="code">Call Martian Citadel</span>. Mars Base Alpha answers and explains the problem.</p>
+            <p class="scene">Scenes 1–2</p>
+          </li>
+          <li>
+            <h3>Open the Orbital Utility Kit</h3>
+            <p>Students find the "shopping list" in the ship's manual. They solve it to get the 3-digit code <code>783</code>, which opens the box.</p>
+          </li>
+          <li>
+            <h3>Solve the puzzle to find the kettle</h3>
+            <p>Students take the puzzle out of the envelope and fill in the grid to make an image, then go two down and three across to find the kettle on the reverse.
+            Inside the kettle is a torn-out page. They type its phrase into the terminal:</p>
+            <p><code>Time's tide waits for no one: set course for the future.</code></p>
+            <p>It must be exact: capitals, spelling and punctuation all count. Quotation marks around it are fine either way, and so are the curly quotes iPads add.</p>
+            <p class="scene">Scene 3</p>
+          </li>
+          <li>
+            <h3>Test the gravity</h3>
+            <p>Mars Base Alpha asks whether the gravity feels normal (any answer is fine), then asks for a measurement.
+            Students follow the pendulum instructions in the manual: time 10 swings and divide by 10.
+            The period should be about <code>2</code>; anything from 1.9 to 2.1 is accepted. They type the number only, with no unit.
+            If they type about 1, Alpha tells them they've counted each swing and should double it.</p>
+            <p class="scene">Scenes 4–5</p>
+          </li>
+          <li>
+            <h3>Open the Captain's Locker</h3>
+            <p>Alpha reports back from Earth and says the access code is under the captain's desk. Students solve the Captain's Code-le
+            to get <code>478</code> and open the cupboard to find the black and white grid.</p>
+            <p class="scene">Scene 6</p>
+          </li>
+          <li>
+            <h3>Restart the engines</h3>
+            <p>Looking through the red filter (there's a hint on the bottom of the box) reveals the restart code on the grid.
+            In the ship's menu students choose <span class="code">Engines</span>, press Enter, then type <code>8643</code>.</p>
+            <p class="scene">Scenes 7–8</p>
+          </li>
+          <li>
+            <h3>Mission report</h3>
+            <p>The engines start, the cabin warms up, and Mars Base Alpha calls to congratulate them. A mission report then shows the crew names,
+            time taken, number of wrong answers and the coldest the cabin got. It isn't saved anywhere, so take a photo of it or press <span class="code">Copy report</span>.</p>
+            <p class="scene">Scene 9</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="codes">
+        <h2>Answers at a glance</h2>
+        <table>
+          <thead><tr><th>Where</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>Do Now</td><td class="answer">TEMPORA</td></tr>
+            <tr><td>Utility Kit padlock (shopping list)</td><td class="answer">783</td></tr>
+            <tr><td>Phrase from the torn-out page</td><td class="answer">Time's tide waits for no one: set course for the future.</td></tr>
+            <tr><td>Pendulum period</td><td class="answer">2 (1.9 to 2.1)</td></tr>
+            <tr><td>Captain's Locker padlock (Code-le)</td><td class="answer">478</td></tr>
+            <tr><td>Engine restart code (red filter)</td><td class="answer">8643</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="help">
+        <h2>If something goes wrong</h2>
+        <ul>
+          <li><strong>The game doesn't time out.</strong> Groups can take as long as they need.</li>
+          <li><strong>Page refreshed or closed by accident:</strong> reopen it and click <span class="code">Resume from step N</span> on the start screen. The group restarts at the beginning of the scene they were on.</li>
+          <li><strong>A group is stuck or you need to skip ahead:</strong> on the start screen, click <span class="code">sys admin</span> in the bottom-right corner and choose a scene. You can also clear saved progress there.</li>
+          <li><strong>Waiting for text to type out:</strong> pressing Enter while Mars Base Alpha is talking finishes the current message instantly.</li>
+        </ul>
+        <h3>Scenes in the sys admin menu</h3>
+        <ol class="scenes">
+          <li>Ship menus: call the Citadel</li>
+          <li>Mars Base Alpha explains</li>
+          <li>Secret phrase from the manual</li>
+          <li>Gravity check</li>
+          <li>Pendulum period</li>
+          <li>Clearance from Earth</li>
+          <li>Ship menus: engines</li>
+          <li>Engine restart code</li>
+          <li>Final call</li>
+        </ol>
+        <p>Starting from a later scene begins colder, to match how far through the mission the group would be. The mission report notes that the run didn't start from the beginning.</p>
+      </section>
+
+      <section id="after">
+        <h2>Afterwards</h2>
+        <p>Put everything back where it came from, using <a href="#kit">each group's kit</a> as a checklist, and lock the padlocks again ready for the next class.</p>
+      </section>
+
+      <footer>
+        This page isn't linked from the game, but it is public. Keep the address away from students, as it contains the answers.
+      </footer>
+    </main>
+  </body>
+</html>
