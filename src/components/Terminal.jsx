@@ -83,7 +83,7 @@ export default function Terminal({ runner, startScene = 0 }) {
         </header>
 
         <div className="term-scroll" ref={screenRef}>
-          <pre className="term-out">
+          <pre className={runner.finished ? 'term-out term-done' : 'term-out'}>
             {runner.segments.map((seg, i) => (
               <Segment key={i} seg={seg} onPick={(n) => runner.pickChoice(n)} />
             ))}

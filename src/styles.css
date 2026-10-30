@@ -490,9 +490,11 @@ button { font: inherit; color: inherit; }
 
 /* ---------- Mission report ---------- */
 
+.term-done { padding-bottom: 0; } /* no empty gap before the mission report */
 .report {
   max-width: 44ch;
-  margin: 2.2em 0 3em;
+  width: 100%;
+  margin: 1.2em auto 2.5em;
   padding: 1.1em 1.4em 0.9em;
   border: 1px solid rgb(57 255 136 / 0.45);
   border-radius: 6px;

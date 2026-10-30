@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatC } from '../game/climate.js'
 import { SCENES } from '../game/scenes.js'
 
@@ -10,6 +10,17 @@ function duration(ms) {
 
 export default function MissionReport({ runner }) {
   const [copied, setCopied] = useState(false)
+  const [ready, setReady] = useState(false) // the report appears 3 seconds after the engines start
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const id = setTimeout(() => setReady(true), 3000)
+    return () => clearTimeout(id)
+  }, [])
+
+  useEffect(() => {
+    if (ready) ref.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }, [ready])
 
   const { wrong, crew, startScene } = runner
   const wrongTotal = wrong.phrase + wrong.period + wrong.code
@@ -40,8 +51,10 @@ export default function MissionReport({ runner }) {
     } catch { /* clipboard unavailable: they can screenshot instead */ }
   }
 
+  if (!ready) return null
+
   return (
-    <section className="report" aria-label="Mission report">
+    <section ref={ref} className="report" aria-label="Mission report">
       <h2 className="report-title">Mission report</h2>
       <p className="report-sub">Engines restarted. Transmission ended.</p>
 
