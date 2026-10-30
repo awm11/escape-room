@@ -168,63 +168,89 @@ button { font: inherit; color: inherit; }
   text-shadow: var(--glow);
 }
 
-/* ---------- Scene picker ---------- */
+/* ---------- Sys admin picker ---------- */
 
 .picker-backdrop {
   position: absolute;
   inset: 0;
   z-index: 4;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  background: rgb(0 6 4 / 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 3vw, 24px);
+  background: rgb(0 6 4 / 0.82);
   backdrop-filter: blur(2px);
 }
 
 .picker {
-  width: min(560px, 100%);
-  max-height: 100%;
-  overflow: auto;
-  padding: 20px;
-  text-align: left;
-  background: var(--screen);
-  border: 1px solid var(--bezel-edge);
-  border-radius: 8px;
-}
-.picker h2 { margin: 0 0 6px; font-size: 1em; color: var(--prompt); }
-.picker-guide { margin: 0 0 14px; font-size: 0.8em; color: var(--dim); }
-.picker-guide a { color: var(--prompt); text-underline-offset: 0.2em; }
-
-.picker-list { list-style: none; margin: 0; padding: 0; }
-.picker-list button {
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: 2ch 1fr;
-  column-gap: 1ch;
-  width: 100%;
-  padding: 8px 10px;
-  text-align: left;
-  background: none;
-  border: 0;
-  border-radius: 4px;
-}
-.picker-list button:hover,
-.picker-list button:focus-visible { background: rgb(57 255 136 / 0.08); }
-.picker-num { color: var(--prompt); }
-.picker-fn { grid-column: 2; font-size: 0.75em; color: var(--dim); }
-
-.picker-foot {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--bezel-edge);
-  font-size: 0.85em;
+  flex-direction: column;
+  width: min(680px, 100%);
+  max-height: 100%;
+  padding: clamp(14px, 3vw, 24px);
+  text-align: left;
+  font-size: 0.9em;
+  background: var(--screen);
+  border: 1px solid rgb(57 255 136 / 0.35);
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgb(0 0 0 / 0.6);
 }
-.picker-note { color: var(--dim); }
 
+.picker-head { flex: none; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+.picker-head h2 { margin: 0 0 4px; font-size: 1.15em; color: var(--prompt); }
+.picker-head p { margin: 0; color: var(--dim); font-size: 0.9em; }
+.picker-guide {
+  flex: none;
+  padding: 0.35em 0.8em;
+  color: var(--prompt);
+  text-decoration: none;
+  border: 1px solid rgb(57 255 136 / 0.45);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.picker-guide::after { content: ' \2197'; }
+.picker-guide:hover { background: rgb(57 255 136 / 0.1); }
+
+.picker-set { min-height: 0; flex: 1 1 auto; display: flex; flex-direction: column; }
+.picker-legend { padding: 0 0 6px; color: var(--text); font-weight: 700; }
+
+.picker-list {
+  list-style: none;
+  margin: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: 2px 4px 2px 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1c2e24 transparent;
+}
+.picker-list li { margin: 0 0 2px; }
+.picker-list label {
+  display: grid;
+  grid-template-columns: 2.2ch 1fr;
+  column-gap: 1.2ch;
+  padding: 7px 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 5px;
+}
+.picker-list label:hover { background: rgb(57 255 136 / 0.06); }
+.picker-list label.is-picked { background: rgb(57 255 136 / 0.12); border-color: rgb(57 255 136 / 0.55); }
+.picker-list input { position: absolute; opacity: 0; pointer-events: none; }
+.picker-list label:has(input:focus-visible) { outline: 2px solid var(--prompt); outline-offset: 1px; }
+.picker-num { color: var(--prompt); font-weight: 700; text-align: right; }
+.picker-text { display: grid; gap: 1px; }
+.picker-title { color: var(--echo); font-weight: 700; }
+.picker-blurb { color: var(--text); opacity: 0.8; font-size: 0.88em; line-height: 1.35; }
+
+.picker-facts { flex: none; list-style: none; margin: 12px 0 0; padding: 10px 0 0; border-top: 1px solid var(--bezel-edge); color: var(--dim); font-size: 0.82em; }
+.picker-facts li { margin: 3px 0; }
+.picker-facts strong { color: var(--text); }
+.picker-facts .btn-quiet { padding: 0 0.2em; font-size: 1em; }
+
+.picker-foot { flex: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; }
+.picker-start { padding: 0.6em 1.3em; font-size: 1em; }
+.picker-start:disabled { cursor: not-allowed; background: #1c2e24; color: var(--dim); box-shadow: none; }
 
 /* ---------- Frost ----------
    Grows from the edges as the cabin cools (--frost runs 0 to 1, set from the

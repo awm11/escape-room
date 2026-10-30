@@ -214,14 +214,25 @@ async function finalAlpha(t) {
   await alphaTalk(t, 'Until then, fly safely.')
 }
 
+// `blurb` and `needs` are shown in the sys admin scene picker and the mission
+// report. They never appear to students in the game itself.
 export const SCENES = [
-  { id: 'menus_start', title: 'Ship menus — call the Citadel', run: menusStart },
-  { id: 'alpha_explains', title: 'Mars Base Alpha explains', run: alphaExplains },
-  { id: 'testing_you', title: 'Secret phrase from the manual', run: testingYou },
-  { id: 'pendulum_task', title: 'Gravity check', run: pendulumTask },
-  { id: 'check_period', title: 'Pendulum period', run: checkPeriod },
-  { id: 'engine_code_task', title: 'Clearance from Earth', run: engineCodeTask },
-  { id: 'menus_end', title: 'Ship menus — engines', run: menusEnd },
-  { id: 'start_spaceship_engine', title: 'Engine restart code', run: startSpaceshipEngine },
-  { id: 'final_alpha', title: 'Final call', run: finalAlpha },
+  { id: 'menus_start', title: 'Ship menus: call the Citadel', run: menusStart,
+    blurb: 'The start of the mission. Students explore the ship menus, then call the Martian Citadel.' },
+  { id: 'alpha_explains', title: 'Mars Base Alpha explains', run: alphaExplains,
+    blurb: 'Alpha explains the engine failure and the 40 minutes before it gets dangerously cold.' },
+  { id: 'testing_you', title: 'Secret phrase from the manual', run: testingYou,
+    blurb: 'Students type the phrase from the torn-out page.', needs: 'The kettle puzzle solved' },
+  { id: 'pendulum_task', title: 'Gravity check', run: pendulumTask,
+    blurb: 'Alpha asks whether gravity feels normal, then asks for a measurement.' },
+  { id: 'check_period', title: 'Pendulum period', run: checkPeriod,
+    blurb: 'Students time the pendulum and enter the period in seconds.', needs: 'The pendulum set up in the clamp stand' },
+  { id: 'engine_code_task', title: 'Clearance from Earth', run: engineCodeTask,
+    blurb: "Alpha reports that Earth has cleared the restart and points to the Captain's Locker, then ends the call.", needs: 'Gravity check passed' },
+  { id: 'menus_end', title: 'Ship menus: engines', run: menusEnd,
+    blurb: 'Back at the ship menus. Students choose Engines to reach the restart code prompt.', needs: "The Captain's Locker opened" },
+  { id: 'start_spaceship_engine', title: 'Engine restart code', run: startSpaceshipEngine,
+    blurb: 'Students type the restart code from the red-filter grid. The engines start up.', needs: 'The restart code decoded' },
+  { id: 'final_alpha', title: 'Final call', run: finalAlpha,
+    blurb: 'Alpha makes the final call, then the mission report appears. The cabin warms up.' },
 ]

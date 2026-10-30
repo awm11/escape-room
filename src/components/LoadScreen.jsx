@@ -54,6 +54,7 @@ export default function LoadScreen({ saved, onStart, onResume, onSelectScene, on
         {picking && (
           <ScenePicker
             saved={saved}
+            crew={crew}
             onPick={(i) => { setPicking(false); onSelectScene(i, crew) }}
             onClose={() => setPicking(false)}
             onClearSaved={onClearSaved}
@@ -64,53 +65,101 @@ export default function LoadScreen({ saved, onStart, onResume, onSelectScene, on
   )
 }
 
-function ScenePicker({ saved, onPick, onClose, onClearSaved }) {
-  const firstRef = useRef(null)
+function ScenePicker({ saved, crew, onPick, onClose, onClearSaved }) {
+  // Nothing starts until "Start" is pressed, so a stray click can't launch a scene.
+  const [choice, setChoice] = useState(saved ?? null)
+  const listRef = useRef(null)
+
   useEffect(() => {
-    firstRef.current?.focus()
+    // Focus the saved scene if there is one (and scroll to it), otherwise the first.
+    const list = listRef.current
+    const el = list?.querySelector('input:checked') ?? list?.querySelector('input')
+    el?.focus({ preventScroll: true })
+    el?.closest('label')?.scrollIntoView({ block: 'nearest' })
     const onKey = (e) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  function submit(e) {
+    e.preventDefault()
+    if (choice !== null) onPick(choice)
+  }
+
   return (
     <div className="picker-backdrop" onClick={onClose}>
-      <div
+      <form
         className="picker"
         role="dialog"
         aria-modal="true"
         aria-labelledby="picker-title"
         onClick={(e) => e.stopPropagation()}
+        onSubmit={submit}
       >
-        <h2 id="picker-title">Start from scene</h2>
-        <p className="picker-guide">
-          <a href={`${import.meta.env.BASE_URL}resources/`} target="_blank" rel="noopener">
-            Open the teacher guide
-          </a>{' '}
-          (set-up, answers and printable resources, in a new tab)
-        </p>
-        <ol className="picker-list">
-          {SCENES.map((s, i) => (
-            <li key={s.id}>
-              <button ref={i === 0 ? firstRef : undefined} onClick={() => onPick(i)}>
-                <span className="picker-num">{i + 1}</span>
-                <span className="picker-title">{s.title}</span>
-                <code className="picker-fn">{s.id}()</code>
-              </button>
-            </li>
-          ))}
-        </ol>
-        <div className="picker-foot">
-          {saved != null ? (
-            <button className="btn-quiet" onClick={onClearSaved}>
-              Clear saved progress (step {saved + 1})
-            </button>
-          ) : (
-            <span className="picker-note">No saved progress on this device.</span>
-          )}
-          <button className="btn-quiet" onClick={onClose}>Close</button>
+        <header className="picker-head">
+          <div>
+            <h2 id="picker-title">Sys admin</h2>
+            <p>Start a group part-way through the mission, for example after a refresh or to skip ahead.</p>
+          </div>
+          <a
+            className="picker-guide"
+            href={`${import.meta.env.BASE_URL}resources/`}
+            target="_blank"
+            rel="noopener"
+          >
+            Teacher guide
+          </a>
+        </header>
+
+        <div className="picker-set" role="radiogroup" aria-labelledby="picker-legend">
+          <div className="picker-legend" id="picker-legend">Choose where to start</div>
+          <ol className="picker-list" ref={listRef}>
+            {SCENES.map((s, i) => (
+              <li key={s.id}>
+                <label className={choice === i ? 'is-picked' : undefined}>
+                  <input
+                    type="radio"
+                    name="scene"
+                    checked={choice === i}
+                    onChange={() => setChoice(i)}
+                    onDoubleClick={() => onPick(i)}
+                  />
+                  <span className="picker-num">{i + 1}</span>
+                  <span className="picker-text">
+                    <span className="picker-title">{s.title}</span>
+                    <span className="picker-blurb">{s.blurb}</span>
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ol>
         </div>
-      </div>
+
+        <ul className="picker-facts">
+          <li>
+            The game starts as soon as you press Start. Starting later begins with a colder cabin, and the
+            mission report will say it wasn't a full run.
+          </li>
+          {crew.trim() && <li>Crew names on the start screen will be used: {crew.trim()}.</li>}
+          <li>
+            {saved != null ? (
+              <>
+                Saved on this device: <strong>scene {saved + 1}</strong> ({SCENES[saved].title}).{' '}
+                <button type="button" className="btn-quiet" onClick={onClearSaved}>Clear saved progress</button>
+              </>
+            ) : (
+              'No saved progress on this device.'
+            )}
+          </li>
+        </ul>
+
+        <footer className="picker-foot">
+          <button type="button" className="btn-quiet" onClick={onClose}>Close</button>
+          <button type="submit" className="btn-primary picker-start" disabled={choice === null}>
+            {choice === null ? 'Choose a scene' : `Start from scene ${choice + 1}`}
+          </button>
+        </footer>
+      </form>
     </div>
   )
 }

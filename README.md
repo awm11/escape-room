@@ -1,6 +1,6 @@
 # Escape room: TEMPORA
 
-A terminal-style escape room for Year 8, ported from `escape.py` to React + Vite.
+A terminal-style escape room, ported from `escape.py` to React + Vite.
 Served at **alexmoorephysics.com/escape-room/**.
 
 ## Run it
@@ -75,7 +75,7 @@ The ice crystals are drawn by `scripts/make-frost.mjs` (re-run it with
 | `src/components/` | Start screen, facilitator picker, terminal, mission report |
 | `src/game/climate.js` | Cabin temperature: start value, cooling rate, per-scene start points |
 | `resources/index.html` | Teacher guide page |
-| `public/downloads/` | Printed resources, manual, Do Now, letter, how-to, Python backup |
+| `public/downloads/` | Printed resources, manual, Do Now, letter, how-to |
 | `src/styles.css` | Colours and CRT styling (tokens at the top) |
 
 ## Answers
